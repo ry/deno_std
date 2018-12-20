@@ -1,0 +1,22 @@
+variables:
+  RUST_BACKTRACE: 1
+
+jobs:
+
+- job: 'Linux'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  steps: &steps
+  - script: bash -c "curl -L https://deno.land/x/install/install.py | python - v0.2.3"
+  - script: echo '##vso[task.prependpath]$(HOME)/.deno/bin/'
+  - script: &test deno test.ts --allow-run --allow-net
+
+- job: 'Mac'
+  pool:
+    vmImage: 'macOS-10.13'
+  steps: *steps
+
+- job: 'Windows'
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps: *steps
